@@ -1,0 +1,222 @@
+// ========================================
+// Cabangile Marketing Consultant Hub
+// products.js
+// ========================================
+
+// Product Data
+const products = [
+  {
+    id: 1,
+    title: "Digital Marketing Masterclass",
+    category: "courses",
+    price: 499,
+    image: "assets/images/product1.jpg",
+    description: "Complete digital marketing training course."
+  },
+  {
+    id: 2,
+    title: "SEO Growth Blueprint",
+    category: "ebooks",
+    price: 199,
+    image: "assets/images/product2.jpg",
+    description: "Learn SEO strategies that generate traffic."
+  },
+  {
+    id: 3,
+    title: "Business Startup Toolkit",
+    category: "templates",
+    price: 299,
+    image: "assets/images/product3.jpg",
+    description: "Templates, plans and business resources."
+  },
+  {
+    id: 4,
+    title: "Social Media Content Pack",
+    category: "templates",
+    price: 149,
+    image: "assets/images/product4.jpg",
+    description: "Ready-to-use social media graphics."
+  },
+  {
+    id: 5,
+    title: "Website Launch Guide",
+    category: "ebooks",
+    price: 99,
+    image: "assets/images/product5.jpg",
+    description: "Step-by-step website launch process."
+  },
+  {
+    id: 6,
+    title: "Branding Strategy Course",
+    category: "courses",
+    price: 399,
+    image: "assets/images/product6.jpg",
+    description: "Build a strong and memorable brand."
+  }
+];
+
+// ========================================
+// Load Products
+// ========================================
+
+function displayProducts(productList = products) {
+
+  const container = document.getElementById("products-container");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  productList.forEach(product => {
+
+    container.innerHTML += `
+      <div class="col-lg-4 col-md-6 mb-4">
+
+        <div class="service-card h-100">
+
+          <img
+            src="${product.image}"
+            alt="${product.title}"
+            class="img-fluid rounded mb-3"
+          >
+
+          <h4>${product.title}</h4>
+
+          <p>${product.description}</p>
+
+          <h5 class="mb-3">
+            R${product.price}
+          </h5>
+
+          <div class="d-flex gap-2">
+
+            <button
+              class="btn-primary-cmc"
+              onclick="addToCart(${product.id})">
+              Add To Cart
+            </button>
+
+            <button
+              class="btn-secondary-cmc"
+              onclick="viewProduct(${product.id})">
+              View
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+    `;
+  });
+}
+
+// ========================================
+// Product Details
+// ========================================
+
+function viewProduct(id) {
+
+  const product = products.find(p => p.id === id);
+
+  if (!product) return;
+
+  localStorage.setItem(
+    "selectedProduct",
+    JSON.stringify(product)
+  );
+
+  window.location.href = "product-details.html";
+}
+
+// ========================================
+// Cart System
+// ========================================
+
+function addToCart(id) {
+
+  const product = products.find(p => p.id === id);
+
+  if (!product) return;
+
+  let cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  cart.push(product);
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  alert(${product.title} added to cart.);
+}
+
+// ========================================
+// Category Filter
+// ========================================
+
+function filterProducts(category) {
+
+  if (category === "all") {
+    displayProducts(products);
+    return;
+  }
+
+  const filtered = products.filter(
+    product => product.category === category
+  );
+
+  displayProducts(filtered);
+}
+
+// ========================================
+// Search Products
+// ========================================
+
+function searchProducts() {
+
+  const input =
+    document.getElementById("product-search");
+
+  if (!input) return;
+
+  const search =
+    input.value.toLowerCase();
+
+  const results = products.filter(product =>
+    product.title.toLowerCase().includes(search)
+  );
+
+  displayProducts(results);
+}
+
+// ========================================
+// Product Counter
+// ========================================
+
+function updateProductCount() {
+
+  const counter =
+    document.getElementById("product-count");
+
+  if (!counter) return;
+
+  counter.textContent =
+    ${products.length} Products;
+}
+
+// ========================================
+// Init
+// ========================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    displayProducts();
+
+    updateProductCount();
+
+  }
+);
